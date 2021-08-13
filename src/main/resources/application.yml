@@ -1,0 +1,14 @@
+server:
+  port: 8010
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3310/basketballdb
+    username: root
+    password: Adesso_346107d
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    #   https://docs.spring.io/spring-boot/docs/current/reference/html/howto-database-initialization.html
+    #    generate-ddl: true
+    show-sql: false
+    hibernate:
+      ddl-auto: none
