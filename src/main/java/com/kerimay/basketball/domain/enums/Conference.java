@@ -8,7 +8,8 @@ public enum Conference implements IEnum {
 
     WEST("WEST", "Conference.WEST"),
     EAST("EAST", "Conference.EAST"),
-    EUROPE("EUROPE", "Conference.EUROPE");
+    EUROPE("EUROPE", "Conference.EUROPE"),
+    FREE("FREE", "Conference.FREE");
 
     private final String key;
     private final String messageKey;

@@ -1,14 +1,10 @@
 package com.kerimay.basketball.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.istack.NotNull;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import java.util.UUID;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -18,8 +14,8 @@ import java.util.UUID;
 public class Stat {
 
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @NotNull
     private double playedMinutes;

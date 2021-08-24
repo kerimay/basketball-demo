@@ -2,18 +2,29 @@ package com.kerimay.basketball.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-@SuperBuilder
+@Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Player extends Person {
+public class Player {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @NotNull
+    private String name;
+
+    @NotNull
+    private String lastName;
+
+    private String nationality;
 
     @ToString.Exclude // avoid recursion
     @EqualsAndHashCode.Exclude // avoid recursion

@@ -2,12 +2,11 @@ package com.kerimay.basketball.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kerimay.basketball.domain.enums.Conference;
-import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -17,8 +16,8 @@ import java.util.UUID;
 public class Team {
 
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @NotNull
     private String name;
@@ -30,7 +29,7 @@ public class Team {
     @ToString.Exclude // avoid recursion
     @EqualsAndHashCode.Exclude // avoid recursion
     @JsonIgnore
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "team")
     private HeadCoach headCoach;
 
     @ToString.Exclude // avoid recursion
@@ -39,7 +38,9 @@ public class Team {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
     private List<Player> players;
 
+    @Column(name = "win_count")
     private int winningRecordThisSeason;
 
+    @Column(name = "lose_count")
     private int losingRecordThisSeason;
 }
