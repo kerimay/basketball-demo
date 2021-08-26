@@ -20,14 +20,27 @@ public class PlayerService {
     private final PlayerRepository playerRepository;
     private final TeamRepository teamRepository;
 
-    public Player getPlayerById(int id) {
-        return playerRepository.getPlayerById(id);
+    public Player getPlayerById(int id) throws Exception {
+        return playerRepository.getPlayerById(id).orElseThrow(() -> new Exception("Player not found"));
     }
 
     public PlayerDTO createPlayer(PlayerDTO playerDTO) {
         Player newPlayer = fromPlayerDTO(playerDTO);
         playerRepository.save(newPlayer);
         return playerDTO;
+    }
+
+    public List<Player> getAllPlayers() {
+        return playerRepository.getAllPlayers();
+    }
+
+    public void updatePlayer(PlayerDTO playerDTO) {
+        Player updatedPlayer = fromPlayerDTO(playerDTO);
+        playerRepository.save(updatedPlayer);
+    }
+
+    public void deletePlayerById(int id) {
+        playerRepository.deletePlayerById(id);
     }
 
     public Player fromPlayerDTO(PlayerDTO playerDTO) {
@@ -38,13 +51,5 @@ public class PlayerService {
                 .nationality(playerDTO.getNationality())
                 .team(optionalTeam.orElse(Team.builder().name("Free Agent").build()))
                 .build();
-    }
-
-    public List<Player> getAllPlayers() {
-        return playerRepository.getAllPlayers();
-    }
-
-    public void deletePlayerById(int id) {
-        playerRepository.deletePlayerById(id);
     }
 }

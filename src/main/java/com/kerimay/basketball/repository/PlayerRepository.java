@@ -8,12 +8,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 @Transactional
 public interface PlayerRepository extends JpaRepository<Player, UUID> {
-    Player getPlayerById(int id);
+    Optional<Player> getPlayerById(int id);
 
     @Query("select P from Player P")
     List<Player> getAllPlayers();

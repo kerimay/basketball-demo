@@ -32,13 +32,18 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}")
-    public Player getPlayer(@PathVariable int id) {
+    public Player getPlayer(@PathVariable int id) throws Exception {
         return playerService.getPlayerById(id);
     }
 
     @GetMapping
     public List<Player> getAllPlayers() {
         return playerService.getAllPlayers();
+    }
+
+    @PutMapping()
+    public void updatePlayer(@RequestBody PlayerDTO playerDTO) {
+        playerService.updatePlayer(playerDTO);
     }
 
     @DeleteMapping("/{id}")
