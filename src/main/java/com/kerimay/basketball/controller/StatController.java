@@ -1,14 +1,13 @@
 package com.kerimay.basketball.controller;
 
 import com.kerimay.basketball.controller.dto.StatDTO;
+import com.kerimay.basketball.domain.PlayerAverageStats;
 import com.kerimay.basketball.domain.Stat;
 import com.kerimay.basketball.service.StatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @Transactional
@@ -24,9 +23,9 @@ public class StatController {
         return statService.newStats(statDTO);
     }
 
-    @GetMapping("/{id}")
-    public List<Stat> getStatsByPlayerId(@PathVariable int id) {
-        return statService.getStatsByPlayerId(id);
+    @GetMapping(value = "average/{playerId}")
+    public PlayerAverageStats getAverageStats(@PathVariable int playerId) throws Exception {
+        return statService.averageStat(playerId);
     }
 
 }

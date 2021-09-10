@@ -1,16 +1,19 @@
 package com.kerimay.basketball.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @Builder
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 public class Stat {
 
     @Id
@@ -21,40 +24,40 @@ public class Stat {
     private double playedMinutes;
 
     @NotNull
-    private int points;
+    private double points;
 
     @NotNull
-    private int rebounds;
+    private double rebounds;
 
     @NotNull
-    private int assists;
+    private double assists;
 
     @NotNull
-    private int steals;
+    private double steals;
 
     @NotNull
-    private int blocks;
+    private double blocks;
 
     @NotNull
-    private int turnovers;
+    private double turnovers;
 
     @NotNull
-    private int fieldGoalAttempt;
+    private double fieldGoalAttempt;
 
     @NotNull
-    private int fieldGoalMade;
+    private double fieldGoalMade;
 
     @NotNull
-    private int threePointAttempt;
+    private double threePointAttempt;
 
     @NotNull
-    private int threePointMade;
+    private double threePointMade;
 
     @NotNull
-    private int freeThrowAttempt;
+    private double freeThrowAttempt;
 
     @NotNull
-    private int freeThrowMade;
+    private double freeThrowMade;
 
     @ToString.Exclude // avoid recursion
     @EqualsAndHashCode.Exclude // avoid recursion
@@ -62,4 +65,28 @@ public class Stat {
     @ManyToOne
     private Player player;
 
+    @NotNull
+    private LocalDateTime timestamp;
+
+    public Stat(int id, @NotNull double playedMinutes, @NotNull double points, @NotNull double rebounds, @NotNull double assists, @NotNull double steals, @NotNull double blocks, @NotNull double turnovers, @NotNull double fieldGoalAttempt, @NotNull double fieldGoalMade, @NotNull double threePointAttempt, @NotNull double threePointMade, @NotNull double freeThrowAttempt, @NotNull double freeThrowMade, Player player, @NotNull LocalDateTime timestamp) {
+        this.id = id;
+        this.playedMinutes = playedMinutes;
+        this.points = points;
+        this.rebounds = rebounds;
+        this.assists = assists;
+        this.steals = steals;
+        this.blocks = blocks;
+        this.turnovers = turnovers;
+        this.fieldGoalAttempt = fieldGoalAttempt;
+        this.fieldGoalMade = fieldGoalMade;
+        this.threePointAttempt = threePointAttempt;
+        this.threePointMade = threePointMade;
+        this.freeThrowAttempt = freeThrowAttempt;
+        this.freeThrowMade = freeThrowMade;
+        this.player = player;
+        this.timestamp = LocalDateTime.now();
+    }
+
+    public Stat() {
+    }
 }

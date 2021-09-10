@@ -31,3 +31,5 @@ create table head_coach
 
 alter table player
     add constraint FKplayerteamid foreign key (team_id) references team (id);
+
+alter table head_coach add constraint FKteamheadcoach foreign key (team_id) references team (id);
