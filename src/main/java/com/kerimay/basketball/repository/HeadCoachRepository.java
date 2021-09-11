@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface HeadCoachRepository extends JpaRepository<HeadCoach, Long> {
+public interface HeadCoachRepository extends JpaRepository<HeadCoach, Integer> {
     HeadCoach getHeadCoachByName(String name);
 }

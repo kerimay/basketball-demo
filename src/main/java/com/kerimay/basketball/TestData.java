@@ -1,14 +1,10 @@
 package com.kerimay.basketball;
 
-import com.kerimay.basketball.domain.HeadCoach;
-import com.kerimay.basketball.domain.Player;
-import com.kerimay.basketball.domain.Stat;
-import com.kerimay.basketball.domain.Team;
+import com.kerimay.basketball.controller.dto.GameDTO;
+import com.kerimay.basketball.domain.*;
 import com.kerimay.basketball.domain.enums.Conference;
-import com.kerimay.basketball.repository.HeadCoachRepository;
-import com.kerimay.basketball.repository.PlayerRepository;
-import com.kerimay.basketball.repository.StatRepository;
-import com.kerimay.basketball.repository.TeamRepository;
+import com.kerimay.basketball.repository.*;
+import com.kerimay.basketball.service.GameService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Component
@@ -29,16 +26,22 @@ public class TestData implements ApplicationListener<ApplicationReadyEvent> {
     private final HeadCoachRepository headCoachRepository;
     private final PlayerRepository playerRepository;
     private final StatRepository statRepository;
+    private final GameRepository gameRepository;
+    private final GameService gameService;
 
     @Autowired
     public TestData(final TeamRepository teamRepository,
                     final HeadCoachRepository headCoachRepository,
                     final PlayerRepository playerRepository,
-                    final StatRepository statRepository) {
+                    final StatRepository statRepository,
+                    final GameRepository gameRepository,
+                    final GameService gameService) {
         this.teamRepository = teamRepository;
         this.headCoachRepository = headCoachRepository;
         this.playerRepository = playerRepository;
         this.statRepository = statRepository;
+        this.gameRepository = gameRepository;
+        this.gameService = gameService;
     }
 
     @SneakyThrows
@@ -51,6 +54,7 @@ public class TestData implements ApplicationListener<ApplicationReadyEvent> {
         createTeams();
         createPlayers();
         createDummyStats();
+        createMatches();
     }
 
     private void createPlayers() {
@@ -114,7 +118,7 @@ public class TestData implements ApplicationListener<ApplicationReadyEvent> {
 
     private void createTeam(String name, Conference conference, String headCoachName, String headCoachLastName) {
         HeadCoach headCoach = HeadCoach.builder().name(headCoachName).lastName(headCoachLastName).build();
-
+        headCoach = headCoachRepository.save(headCoach);
         Team team = Team.builder()
                 .name(name)
                 .conference(conference)
@@ -122,7 +126,7 @@ public class TestData implements ApplicationListener<ApplicationReadyEvent> {
                 .build();
         teamRepository.save(team);
         headCoach.setTeam(team);
-        headCoachRepository.save(headCoach);
+
     }
 
     private void createFreeAgent() {
@@ -140,21 +144,44 @@ public class TestData implements ApplicationListener<ApplicationReadyEvent> {
 
     private void createDummyStat(double playedMinutes, double points, double rebounds, double assists, double steals, double blocks, double turnovers,
                                  double fga, double fgm, double tpa, double tpm, double fta, double ftm, int playerId) throws Exception {
-    statRepository.save(Stat.builder()
-                    .playedMinutes(playedMinutes)
-                    .points(points)
-                    .rebounds(rebounds)
-                    .assists(assists)
-                    .steals(steals)
-                    .blocks(blocks)
-                    .turnovers(turnovers)
-                    .fieldGoalAttempt(fga)
-                    .fieldGoalMade(fgm)
-                    .threePointAttempt(tpa)
-                    .threePointMade(tpm)
-                    .freeThrowAttempt(fta)
-                    .freeThrowMade(ftm)
-                    .player(playerRepository.getPlayerById(playerId).orElseThrow(() -> new Exception("Invalid stat because of invalid player")))
-            .build());
+        statRepository.save(Stat.builder()
+                .playedMinutes(playedMinutes)
+                .points(points)
+                .rebounds(rebounds)
+                .assists(assists)
+                .steals(steals)
+                .blocks(blocks)
+                .turnovers(turnovers)
+                .fieldGoalAttempt(fga)
+                .fieldGoalMade(fgm)
+                .threePointAttempt(tpa)
+                .threePointMade(tpm)
+                .freeThrowAttempt(fta)
+                .freeThrowMade(ftm)
+                .player(playerRepository.getPlayerById(playerId).orElseThrow(() -> new Exception("Invalid stat because of invalid player")))
+                .build());
+    }
+
+    private void createMatches() {
+        createMatch(3, 14, 114, 97, 2);
+        createMatch(9, 12, 84, 88, 3);
+    }
+
+    private void createMatch(int team1Id, int team2Id, int team1Score, int team2Score, int playerOfTheGame) {
+        gameService.updateTeamsByWinAndLose(GameDTO.builder()
+                .homeTeam(team1Id)
+                .awayTeam(team2Id)
+                .homeTeamScore(team1Score)
+                .awayTeamScore(team2Score)
+                .playerOfTheGame(playerOfTheGame)
+                .build());
+        gameRepository.save(Game.builder()
+                .homeTeam(teamRepository.getTeamById(team1Id).orElseThrow(() -> new NullPointerException("Team1 not found")))
+                .awayTeam(teamRepository.getTeamById(team2Id).orElseThrow(() -> new NullPointerException("Team2 not found")))
+                .homeTeamScore(team1Score)
+                .awayTeamScore(team2Score)
+                .playerOfTheGame(playerRepository.getPlayerById(playerOfTheGame).orElseThrow(() -> new NullPointerException("Player not found")))
+                .timestamp(LocalDateTime.now())
+                .build());
     }
 }

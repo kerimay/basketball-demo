@@ -1,52 +1,47 @@
 package com.kerimay.basketball.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.kerimay.basketball.domain.enums.Conference;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Team {
+public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ToString.Exclude // avoid recursion
+    @EqualsAndHashCode.Exclude // avoid recursion
+    @JsonIgnore
+    @ManyToOne
+    private Team homeTeam;
+
+    @ToString.Exclude // avoid recursion
+    @EqualsAndHashCode.Exclude // avoid recursion
+    @JsonIgnore
+    @ManyToOne
+    private Team awayTeam;
+
     @NotNull
-    private String name;
+    private int homeTeamScore;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private Conference conference;
+    private int awayTeamScore;
 
     @ToString.Exclude // avoid recursion
     @EqualsAndHashCode.Exclude // avoid recursion
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "team")
-    private HeadCoach headCoach;
+    @ManyToOne
+    private Player playerOfTheGame;
 
-    @ToString.Exclude // avoid recursion
-    @EqualsAndHashCode.Exclude // avoid recursion
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
-    private List<Player> players;
-
-    @ToString.Exclude // avoid recursion
-    @EqualsAndHashCode.Exclude // avoid recursion
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Game> games;
-
-    @Column(name = "win_count")
-    private int winningRecordThisSeason;
-
-    @Column(name = "lose_count")
-    private int losingRecordThisSeason;
+    @NotNull
+    private LocalDateTime timestamp;
 }
