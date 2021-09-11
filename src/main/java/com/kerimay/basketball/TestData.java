@@ -117,16 +117,20 @@ public class TestData implements ApplicationListener<ApplicationReadyEvent> {
     }
 
     private void createTeam(String name, Conference conference, String headCoachName, String headCoachLastName) {
-        HeadCoach headCoach = HeadCoach.builder().name(headCoachName).lastName(headCoachLastName).build();
-        headCoach = headCoachRepository.save(headCoach);
+        HeadCoach headCoach = createHeadCoach(headCoachName, headCoachLastName);
         Team team = Team.builder()
                 .name(name)
                 .conference(conference)
                 .headCoach(headCoach)
                 .build();
-        teamRepository.save(team);
+        team = teamRepository.save(team);
         headCoach.setTeam(team);
 
+    }
+
+    private HeadCoach createHeadCoach(String headCoachName, String headCoachLastName) {
+        HeadCoach headCoach = HeadCoach.builder().name(headCoachName).lastName(headCoachLastName).build();
+        return headCoachRepository.save(headCoach);
     }
 
     private void createFreeAgent() {
