@@ -1,6 +1,13 @@
 server:
   port: 8010
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 618607592835-61s1tp01k2njbj1fu7kar2ubsnu8i4p3.apps.googleusercontent.com
+            client-secret: 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
   datasource:
     url: jdbc:mysql://localhost:3310/basketballdb
     username: root
