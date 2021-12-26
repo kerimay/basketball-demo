@@ -1,13 +1,16 @@
 package com.kerimay.basketball;
 
+import com.kerimay.user.config.AppProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 @Slf4j
 @SpringBootApplication
+@EnableConfigurationProperties(AppProperties.class)
 public class BasketballApplication {
 
     public static void main(String[] args) {

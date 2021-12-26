@@ -12,6 +12,17 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: none
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 618607592835-61s1tp01k2njbj1fu7kar2ubsnu8i4p3.apps.googleusercontent.com
+            clientSecret: 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
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
   flyway:
     enabled: true
     url: jdbc:mysql://localhost:3310/basketballdb?useMysqlMetadata=true
@@ -20,3 +31,20 @@ spring:
     password: Adesso_346107d
     flyway.schemas: basketballdb
     baseline-on-migrate: true
+logging:
+  level:
+    org.springframework.security: DEBUG
+app:
+  auth:
+    tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
+    tokenExpirationMsec: 864000000
+  cors:
+    allowedOrigins: http://localhost:3000 # Comma separated list of allowed origins
+  oauth2:
+    # After successfully authenticating with the OAuth2 Provider,
+    # we'll be generating an auth token for the user and sending the token to the
+    # redirectUri mentioned by the client in the /oauth2/authorize request.
+    # We're not using cookies because they won't work well in mobile clients.
+    authorizedRedirectUris:
+      - http://localhost:8010/oauth2/callback/google
+      - http://localhost:3000/oauth2/redirect
