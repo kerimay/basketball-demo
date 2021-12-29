@@ -1,4 +1,4 @@
-package com.kerimay.basketball;
+package com.kerimay;
 
 import com.kerimay.user.config.AppProperties;
 import lombok.extern.slf4j.Slf4j;
