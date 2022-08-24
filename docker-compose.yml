@@ -6,7 +6,7 @@ services:
       - "3310:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_PASSWORD: michaeljordan23
+      MYSQL_PASSWORD: root
       MYSQL_DATABASE: basketballdb
     volumes:
       - ./mysql:/var/lib/mysql
